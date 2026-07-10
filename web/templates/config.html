@@ -1,0 +1,53 @@
+{% extends "base.html" %}{% block title %}Configurazione{% endblock %}{% block breadcrumb %}Configurazione{% endblock %}
+{% block content %}
+<div class="page-header"><h1>⚙️ Configurazione Bot</h1></div>
+<div class="row">
+<div class="card flex-1">
+  <div class="card-header">👋 Messaggio di Benvenuto</div>
+  <div class="card-body">
+  <form method="POST">
+    <input type="hidden" name="action" value="welcome">
+    <div class="field"><label>Canale</label>
+      <select name="channel_id">{% for ch in channels %}
+        <option value="{{ ch.id }}" {% if ch.id==welcome.channel_id %}selected{% endif %}>#{{ ch.name }}</option>
+      {% endfor %}</select></div>
+    <div class="field"><label>Messaggio</label>
+      <textarea name="message" rows="3">{{ welcome.message }}</textarea>
+      <span class="muted small">Variabili: <code>{mention}</code> <code>{name}</code> <code>{server}</code> <code>{count}</code></span></div>
+    <button class="btn btn-primary">💾 Salva</button>
+  </form>
+  </div>
+</div>
+<div class="card flex-1">
+  <div class="card-header">👋 Messaggio di Addio</div>
+  <div class="card-body">
+  <form method="POST">
+    <input type="hidden" name="action" value="goodbye">
+    <div class="field"><label>Canale</label>
+      <select name="channel_id">{% for ch in channels %}
+        <option value="{{ ch.id }}" {% if ch.id==goodbye.channel_id %}selected{% endif %}>#{{ ch.name }}</option>
+      {% endfor %}</select></div>
+    <div class="field"><label>Messaggio</label>
+      <textarea name="message" rows="3">{{ goodbye.message }}</textarea></div>
+    <button class="btn btn-primary">💾 Salva</button>
+  </form>
+  </div>
+</div>
+</div>
+<div class="card mt">
+  <div class="card-header">🤖 Automod</div>
+  <div class="card-body">
+  <form method="POST">
+    <input type="hidden" name="action" value="automod">
+    <div class="row" style="gap:24px">
+      <div class="field"><label><input type="checkbox" name="enabled" {% if automod.enabled %}checked{% endif %}> Attiva automod</label></div>
+      <div class="field"><label><input type="checkbox" name="filter_links" {% if automod.filter_links %}checked{% endif %}> Filtra link</label></div>
+      <div class="field"><label><input type="checkbox" name="filter_spam" {% if automod.filter_spam %}checked{% endif %}> Anti-spam</label></div>
+      <div class="field"><label>Limite spam (msg/5s)</label><input type="number" name="spam_limit" value="{{ automod.spam_limit }}" min="2" max="20" style="width:80px"></div>
+    </div>
+    <div class="field"><label>Parole blacklist <span class="muted">(separate da virgola)</span></label>
+      <textarea name="blacklist" rows="2" placeholder="parolaccia1, parolaccia2, ...">{{ automod.blacklist }}</textarea></div>
+    <button class="btn btn-primary">💾 Salva configurazione</button>
+  </form>
+  </div>
+</div>{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}{% block title %}Giveaway{% endblock %}{% block breadcrumb %}Giveaway{% endblock %}
+{% block content %}
+<div class="page-header"><h1>🎉 Giveaway</h1></div>
+<div class="card">
+  <div class="card-body" style="padding:0">
+  <table class="table">
+    <thead><tr><th>Premio</th><th>Vincitori</th><th>Host</th><th>Fine</th><th>Stato</th><th>Azioni</th></tr></thead>
+    <tbody>{% for g in giveaways %}
+    <tr>
+      <td><strong>{{ g.premio }}</strong></td>
+      <td>{{ g.vincitori }}</td>
+      <td class="muted small">{{ g.host }}</td>
+      <td class="muted small">{{ g.ends_at | int | format_ts }}</td>
+      <td><span class="badge badge-{{ 'ok' if g.status=='active' else 'muted' }}">{{ '🎉 Attivo' if g.status=='active' else '✅ Terminato' }}</span></td>
+      <td>{% if g.status=='active' %}
+        <form method="POST" action="/giveaways/end/{{ g.message_id }}" style="display:inline" onsubmit="return confirm('Terminare il giveaway?')">
+          <button class="btn btn-xs btn-danger">Termina</button></form>
+      {% else %}<span class="muted small">{{ g.winners or '—' }}</span>{% endif %}</td>
+    </tr>{% else %}<tr><td colspan="6"><div class="empty"><div class="empty-icon">🎉</div><p>Nessun giveaway</p></div></td></tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>{% endblock %}

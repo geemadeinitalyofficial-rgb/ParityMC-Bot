@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo">⚖️</div>
+    <h1>ParityMC</h1>
+    <p class="sub">Pannello di amministrazione</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}<div class="alert alert-{{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    <form method="POST">
+      <div class="field"><label>Username</label><input name="username" type="text" required autofocus placeholder="admin"></div>
+      <div class="field"><label>Password</label><input name="password" type="password" required placeholder="••••••••"></div>
+      <button type="submit" class="btn btn-primary full">Accedi al pannello</button>
+    </form>
+    <div class="login-divider"></div>
+    <p class="muted small">Accesso riservato allo staff di ParityMC</p>
+  </div>
+</div>
+{% endblock %}

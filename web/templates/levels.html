@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block title %}Livelli XP{% endblock %}{% block breadcrumb %}Livelli XP{% endblock %}
+{% block content %}
+<div class="page-header"><h1>⭐ Classifica XP</h1><span class="sub">Top {{ leaderboard|length }} giocatori</span></div>
+<div class="card">
+  <div class="card-body" style="padding:0">
+  <table class="table">
+    <thead><tr><th>#</th><th>Avatar</th><th>Giocatore</th><th>Livello</th><th>XP totale</th><th>Messaggi</th></tr></thead>
+    <tbody>{% for u in leaderboard %}
+    <tr>
+      <td style="font-size:18px">{% if loop.index==1 %}🥇{% elif loop.index==2 %}🥈{% elif loop.index==3 %}🥉{% else %}<span class="muted">#{{ loop.index }}</span>{% endif %}</td>
+      <td>{% if u.avatar %}<img src="{{ u.avatar }}" class="avatar-sm" onerror="this.style.display='none'">{% else %}<div class="avatar-sm" style="background:var(--bg3);display:flex;align-items:center;justify-content:center">⭐</div>{% endif %}</td>
+      <td><strong>{{ u.name }}</strong></td>
+      <td><span class="badge badge-info">Lv {{ u.level }}</span></td>
+      <td><strong>{{ u.xp }}</strong> XP</td>
+      <td class="muted">{{ u.messages }}</td>
+    </tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>{% endblock %}

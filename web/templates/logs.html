@@ -1,0 +1,26 @@
+{% extends "base.html" %}{% block title %}Log{% endblock %}{% block breadcrumb %}Log eventi{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>📋 Log eventi</h1>
+  <div class="tabs">
+    <a href="?level="      class="tab {% if not level %}active{% endif %}">Tutti</a>
+    <a href="?level=OK"    class="tab {% if level=='OK'    %}active{% endif %}">✅ OK</a>
+    <a href="?level=INFO"  class="tab {% if level=='INFO'  %}active{% endif %}">ℹ️ Info</a>
+    <a href="?level=WARN"  class="tab {% if level=='WARN'  %}active{% endif %}">⚠️ Warn</a>
+    <a href="?level=ERROR" class="tab {% if level=='ERROR' %}active{% endif %}">❌ Error</a>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body" style="padding:0">
+  <table class="table">
+    <thead><tr><th>Timestamp</th><th>Livello</th><th>Messaggio</th></tr></thead>
+    <tbody>{% for e in events %}
+    <tr>
+      <td class="mono muted small">{{ e.ts | int | format_ts }}</td>
+      <td><span class="badge badge-{{ e.level|lower }}">{{ e.level }}</span></td>
+      <td>{{ e.message }}</td>
+    </tr>{% else %}<tr><td colspan="3"><div class="empty"><div class="empty-icon">📋</div><p>Nessun evento</p></div></td></tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>{% endblock %}

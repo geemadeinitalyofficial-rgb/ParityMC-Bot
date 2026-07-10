@@ -1,0 +1,40 @@
+{% extends "base.html" %}{% block title %}Sessioni Vocali{% endblock %}{% block breadcrumb %}Sessioni Vocali{% endblock %}
+{% block content %}
+<div class="page-header"><h1>🎙️ Sessioni Vocali</h1><span class="sub">{{ active|length }} attive</span></div>
+<div class="card">
+  <div class="card-header">🟢 Sessioni attive</div>
+  <div class="card-body" style="padding:0">
+    <table class="table">
+      <thead><tr><th>Canale</th><th>Utente ID</th><th>Staff ID</th><th>Durata</th><th>Azioni</th></tr></thead>
+      <tbody>{% for s in active %}
+      <tr>
+        <td class="mono">#{{ s.channel_id }}</td>
+        <td class="mono muted">{{ s.user_id }}</td>
+        <td class="mono muted">{{ s.staff_id }}</td>
+        <td><span class="badge badge-ok">{{ s.created_at | format_dur }}</span></td>
+        <td><form method="POST" action="/sessions/close/{{ s.channel_id }}" style="display:inline" onsubmit="return confirm('Chiudere questa sessione?')">
+          <button class="btn btn-xs btn-danger">🛑 Chiudi</button></form></td>
+      </tr>
+      {% else %}<tr><td colspan="5"><div class="empty"><div class="empty-icon">🎙️</div><p>Nessuna sessione attiva</p></div></td></tr>
+      {% endfor %}</tbody>
+    </table>
+  </div>
+</div>
+<div class="card mt">
+  <div class="card-header">📋 Storico sessioni</div>
+  <div class="card-body" style="padding:0">
+    <table class="table">
+      <thead><tr><th>Canale</th><th>Utente</th><th>Staff</th><th>Stato</th><th>Aperta</th><th>Chiusa</th><th>Motivo</th></tr></thead>
+      <tbody>{% for s in history %}
+      <tr>
+        <td class="mono muted">{{ s.channel_id }}</td>
+        <td class="mono muted">{{ s.user_id }}</td><td class="mono muted">{{ s.staff_id }}</td>
+        <td><span class="badge badge-{{ 'ok' if s.status=='open' else 'muted' }}">{{ s.status }}</span></td>
+        <td class="small muted">{{ s.created_at | int | format_ts }}</td>
+        <td class="small muted">{{ s.closed_at | int | format_ts if s.closed_at else '—' }}</td>
+        <td class="small muted">{{ s.close_reason or '—' }}</td>
+      </tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>{% endblock %}

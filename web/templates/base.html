@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}ParityMC{% endblock %} — Panel</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+</head>
+<body>
+{% if session.get('logged_in') %}
+<nav class="sidebar">
+  <div class="logo">
+    <span class="logo-icon">⚖️</span>
+    <span class="logo-text">ParityMC<br><small>Admin Panel</small></span>
+  </div>
+  <ul>
+    <div class="sidebar-section">Generale</div>
+    <li><a href="{{ url_for('dashboard') }}" {% if request.endpoint=='dashboard' %}class="active"{% endif %}>📊 Dashboard</a></li>
+    <li><a href="{{ url_for('members') }}" {% if request.endpoint=='members' %}class="active"{% endif %}>👥 Membri</a></li>
+    <li><a href="{{ url_for('roles') }}" {% if request.endpoint=='roles' %}class="active"{% endif %}>🎭 Ruoli & RR</a></li>
+    <li><a href="{{ url_for('levels') }}" {% if request.endpoint=='levels' %}class="active"{% endif %}>⭐ Livelli XP</a></li>
+
+    <div class="sidebar-section">Supporto</div>
+    <li><a href="{{ url_for('tickets') }}" {% if request.endpoint=='tickets' %}class="active"{% endif %}>🎫 Ticket</a></li>
+    <li><a href="{{ url_for('sessions') }}" {% if request.endpoint=='sessions' %}class="active"{% endif %}>🎙️ Sessioni Vocali</a></li>
+
+    <div class="sidebar-section">Community</div>
+    <li><a href="{{ url_for('giveaways') }}" {% if request.endpoint=='giveaways' %}class="active"{% endif %}>🎉 Giveaway</a></li>
+    <li><a href="{{ url_for('polls') }}" {% if request.endpoint=='polls' %}class="active"{% endif %}>📊 Sondaggi</a></li>
+
+    <div class="sidebar-section">Sistema</div>
+    <li><a href="{{ url_for('logs') }}" {% if request.endpoint=='logs' %}class="active"{% endif %}>📋 Log eventi</a></li>
+    <li><a href="{{ url_for('bot_config') }}" {% if request.endpoint=='bot_config' %}class="active"{% endif %}>⚙️ Configurazione</a></li>
+
+    <li class="spacer"></li>
+    <li><a href="{{ url_for('logout') }}" class="logout">🚪 Logout</a></li>
+  </ul>
+</nav>
+<main class="content">
+  <div class="topbar">
+    <div class="topbar-left">
+      <span>⚖️ <strong>ParityMC</strong></span>
+      <span>›</span>
+      <span>{% block breadcrumb %}Dashboard{% endblock %}</span>
+    </div>
+    <div class="topbar-right">
+      <div class="status-pill"><span class="dot dot-green"></span>Bot Online</div>
+      <span class="muted small">{{ session.get('logged_in') and 'Admin' or '' }}</span>
+    </div>
+  </div>
+{% endif %}
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+{% if session.get('logged_in') %}
+</main>
+{% endif %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

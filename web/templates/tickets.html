@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}Ticket{% endblock %}{% block breadcrumb %}Ticket{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>🎫 Ticket</h1>
+  <div class="tabs">
+    <a href="?status=open"   class="tab {% if status=='open'   %}active{% endif %}">🟢 Aperti</a>
+    <a href="?status=closed" class="tab {% if status=='closed' %}active{% endif %}">🔴 Chiusi</a>
+    <a href="?status=all"    class="tab {% if status=='all'    %}active{% endif %}">📋 Tutti</a>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body" style="padding:0">
+    <table class="table">
+      <thead><tr><th>ID</th><th>Utente</th><th>Categoria</th><th>Stato</th><th>Aperto il</th><th>Azioni</th></tr></thead>
+      <tbody>
+      {% for t in tickets %}
+      <tr>
+        <td class="mono muted">#{{ t.id }}</td>
+        <td><strong>{{ t.username }}</strong></td>
+        <td><span class="badge">{{ t.categoria|title }}</span></td>
+        <td><span class="badge badge-{{ 'ok' if t.status=='open' else 'muted' }}">
+          {{ '🟢 Aperto' if t.status=='open' else '🔴 Chiuso' }}</span></td>
+        <td class="muted small">{{ t.opened_at | int | format_ts }}</td>
+        <td>{% if t.status=='open' %}
+          <form method="POST" action="/tickets/close/{{ t.channel_id }}" style="display:inline" onsubmit="return confirm('Chiudere questo ticket?')">
+            <button class="btn btn-xs btn-danger">🔒 Chiudi</button>
+          </form>{% else %}<span class="muted small">—</span>{% endif %}
+        </td>
+      </tr>
+      {% else %}<tr><td colspan="6"><div class="empty"><div class="empty-icon">🎫</div><p>Nessun ticket {{ status }}</p></div></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>{% endblock %}

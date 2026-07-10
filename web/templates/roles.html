@@ -1,0 +1,61 @@
+{% extends "base.html" %}{% block title %}Ruoli & Reaction Roles{% endblock %}{% block breadcrumb %}Ruoli & Reaction Roles{% endblock %}
+{% block content %}
+<div class="page-header"><h1>🎭 Ruoli & Reaction Roles</h1></div>
+<div class="row">
+<div class="card flex-2">
+  <div class="card-header">📋 Ruoli del server</div>
+  <div class="card-body" style="padding:0">
+  <table class="table">
+    <thead><tr><th>Colore</th><th>Nome</th><th>Membri</th><th>Posizione</th></tr></thead>
+    <tbody>{% for r in roles %}
+    <tr>
+      <td><span class="color-dot" style="background:{{ r.color }}"></span></td>
+      <td><strong>{{ r.name }}</strong></td><td>{{ r.members }}</td><td>#{{ r.position }}</td>
+    </tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="col flex-1">
+  <div class="card">
+    <div class="card-header">⚙️ Autorole</div>
+    <div class="card-body">
+      <p class="muted small" style="margin-bottom:12px">Assegnati automaticamente ai nuovi membri:</p>
+      {% for rid in autoroles %}
+      <div class="pill-row">
+        <span class="badge badge-info">ID: {{ rid }}</span>
+        <form method="POST" action="/roles/autorole/remove/{{ rid }}" style="display:inline">
+          <button class="btn btn-xs btn-danger">✕ Rimuovi</button></form>
+      </div>
+      {% else %}<p class="muted small">Nessun autorole configurato.</p>{% endfor %}
+      <hr>
+      <form method="POST" action="/roles/autorole/add" class="inline-form">
+        <input name="role_id" type="number" placeholder="ID Ruolo" class="input-sm" required>
+        <button class="btn btn-sm btn-primary">+ Aggiungi</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">🎯 Reaction Roles</div>
+    <div class="card-body" style="padding:0">
+    <table class="table">
+      <thead><tr><th>Msg ID</th><th>Emoji</th><th>Ruolo ID</th><th></th></tr></thead>
+      <tbody>{% for rr in reaction_roles %}
+      <tr>
+        <td class="mono small muted">{{ rr.message_id }}</td>
+        <td style="font-size:18px">{{ rr.emoji }}</td>
+        <td class="mono small muted">{{ rr.role_id }}</td>
+        <td><form method="POST" action="/roles/rr/remove/{{ rr.id }}" style="display:inline">
+          <button class="btn btn-xs btn-danger">✕</button></form></td>
+      </tr>
+      {% else %}<tr><td colspan="4" class="center muted" style="padding:16px">Nessun reaction role</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    <div style="padding:12px 16px"><code>/reaction-role &lt;msg_id&gt; &lt;emoji&gt; &lt;ruolo&gt;</code><br>
+    <span class="muted small">Usa il comando Discord per aggiungere reaction roles</span></div>
+    </div>
+  </div>
+</div>
+</div>{% endblock %}

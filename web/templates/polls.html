@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block title %}Sondaggi{% endblock %}{% block breadcrumb %}Sondaggi{% endblock %}
+{% block content %}
+<div class="page-header"><h1>📊 Sondaggi</h1></div>
+<div class="card">
+  <div class="card-body" style="padding:0">
+  <table class="table">
+    <thead><tr><th>Domanda</th><th>Opzioni</th><th>Autore</th><th>Stato</th></tr></thead>
+    <tbody>{% for p in polls %}
+    <tr>
+      <td><strong>{{ p.domanda }}</strong></td>
+      <td class="muted small">{{ p.opzioni }}</td>
+      <td class="muted small">{{ p.autore }}</td>
+      <td><span class="badge badge-{{ 'ok' if p.status=='open' else 'muted' }}">{{ '🟢 Aperto' if p.status=='open' else '🔴 Chiuso' }}</span></td>
+    </tr>{% else %}<tr><td colspan="4"><div class="empty"><div class="empty-icon">📊</div><p>Nessun sondaggio</p></div></td></tr>{% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>{% endblock %}

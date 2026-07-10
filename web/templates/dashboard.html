@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+  <h1>📊 Dashboard</h1>
+  <span class="sub">{{ guild.name if guild else 'ParityMC' }}</span>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-val" id="s-members">{{ stats.members }}</div><div class="stat-label">Membri totali</div></div>
+  <div class="stat-card"><div class="stat-icon">🤖</div><div class="stat-val">{{ stats.bots }}</div><div class="stat-label">Bot</div></div>
+  <div class="stat-card"><div class="stat-icon">💬</div><div class="stat-val">{{ stats.channels }}</div><div class="stat-label">Canali</div></div>
+  <div class="stat-card"><div class="stat-icon">🎭</div><div class="stat-val">{{ stats.roles }}</div><div class="stat-label">Ruoli</div></div>
+  <div class="stat-card accent-green"><div class="stat-icon">🎫</div><div class="stat-val" id="s-tickets">{{ stats.tickets_open }}</div><div class="stat-label">Ticket aperti</div></div>
+  <div class="stat-card accent-blue"><div class="stat-icon">🎙️</div><div class="stat-val" id="s-sessions">{{ stats.sessions }}</div><div class="stat-label">Sessioni vocali</div></div>
+  <div class="stat-card accent-yellow"><div class="stat-icon">⚠️</div><div class="stat-val">{{ stats.warns }}</div><div class="stat-label">Warn totali</div></div>
+  <div class="stat-card accent-purple"><div class="stat-icon">🎉</div><div class="stat-val">{{ stats.giveaways }}</div><div class="stat-label">Giveaway attivi</div></div>
+</div>
+
+<div class="row">
+  <div class="card flex-2">
+    <div class="card-header">📋 Ultimi eventi di sistema</div>
+    <div class="card-body" style="padding:0">
+      <table class="table">
+        <thead><tr><th>Ora</th><th>Livello</th><th>Messaggio</th></tr></thead>
+        <tbody id="log-body">
+        {% for e in events %}
+        <tr>
+          <td class="mono muted">{{ e.ts | int | format_ts }}</td>
+          <td><span class="badge badge-{{ e.level|lower }}">{{ e.level }}</span></td>
+          <td>{{ e.message }}</td>
+        </tr>
+        {% endfor %}
+        {% if not events %}<tr><td colspan="3" class="center muted" style="padding:24px">Nessun evento</td></tr>{% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card flex-1">
+    <div class="card-header">🤖 Stato Bot</div>
+    <div class="card-body center">
+      <div class="ping-val" id="ping">--</div>
+      <div class="ping-label">ms latenza</div>
+      <hr>
+      <div class="info-row"><span>🎫 Ticket aperti</span><span id="i-tickets">{{ stats.tickets_open }}</span></div>
+      <div class="info-row"><span>🎙️ Sessioni vocali</span><span id="i-sessions">{{ stats.sessions }}</span></div>
+      <div class="info-row"><span>👥 Membri online</span><span>--</span></div>
+      <hr>
+      <div class="status-pill" style="justify-content:center"><span class="dot dot-green"></span>ParityMC Online</div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function refreshStats(){
+  try {
+    const r = await fetch('/api/stats');
+    const d = await r.json();
+    document.getElementById('s-members').textContent = d.members;
+    document.getElementById('s-tickets').textContent = d.tickets_open;
+    document.getElementById('s-sessions').textContent = d.sessions;
+    document.getElementById('ping').textContent = d.latency;
+    document.getElementById('i-tickets').textContent = d.tickets_open;
+    document.getElementById('i-sessions').textContent = d.sessions;
+  } catch(e) {}
+}
+setInterval(refreshStats, 5000);
+</script>
+{% endblock %}

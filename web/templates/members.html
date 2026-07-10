@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Membri{% endblock %}{% block breadcrumb %}Membri{% endblock %}
+{% block content %}
+<div class="page-header"><h1>👥 Membri</h1><span class="sub">{{ members|length }} totali</span></div>
+<div class="card">
+  <div class="card-body" style="padding:16px 20px 0">
+    <input type="text" id="search" placeholder="🔍 Cerca per nome o username..." class="search-box" oninput="filterMembers()">
+  </div>
+  <div class="card-body" style="padding:0">
+    <table class="table" id="members-table">
+      <thead><tr><th>Avatar</th><th>Nome</th><th>Username</th><th>Top Ruolo</th><th>Entrato</th><th>Tipo</th></tr></thead>
+      <tbody>{% for m in members %}
+      <tr data-name="{{ m.name|lower }} {{ m.display|lower }}">
+        <td><img src="{{ m.avatar }}" class="avatar-sm" alt="" onerror="this.style.display='none'"></td>
+        <td><strong>{{ m.display }}</strong></td>
+        <td class="muted small">{{ m.name }}</td>
+        <td><span class="badge">{{ m.top_role }}</span></td>
+        <td class="muted small">{{ m.joined }}</td>
+        <td>{{ '🤖 Bot' if m.bot else '👤 Utente' }}</td>
+      </tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>
+function filterMembers(){
+  const q=document.getElementById('search').value.toLowerCase();
+  document.querySelectorAll('#members-table tbody tr').forEach(r=>{
+    r.style.display=r.dataset.name.includes(q)?'':'none';
+  });
+}
+</script>{% endblock %}
