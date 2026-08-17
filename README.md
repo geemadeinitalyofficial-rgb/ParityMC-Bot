@@ -1,4 +1,4 @@
-cat > /home/claude/bot/paritymc_final/README.md << 'MDEOF'
+
 <div align="center">
 
 # ⚖️ SusMC Bot
