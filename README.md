@@ -379,6 +379,3 @@ I colori semantici (verde = successo, rosso = errore/pericolo) restano invariati
 
 Fatto con 🟡 per la community di **SusMC**
 
-</div>
-MDEOF
-cd /home/claude/bot/paritymc_final && wc -l README.md && echo "README scritto correttamente"
